@@ -2,6 +2,7 @@
 <html lang="nl">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Toesjablox Chat (Cohere API safe)</title>
   <style>
     body {
@@ -38,10 +39,8 @@
     async function send() {
       const prompt = promptEl.value.trim();
       if (!prompt) return;
-
       chatEl.textContent += `\n👤 ${prompt}\n`;
-      promptEl.value = '';
-      chatEl.scrollTop = chatEl.scrollHeight;
+      promptEl.value = ''; chatEl.scrollTop = chatEl.scrollHeight;
 
       try {
         const res = await fetch('/api/cohere', {
@@ -50,12 +49,8 @@
           body: JSON.stringify({ prompt }),
         });
         const data = await res.json();
-
-        if (res.ok) {
-          chatEl.textContent += `🤖 ${data.text}\n`;
-        } else {
-          chatEl.textContent += `⚠️ Error: ${data.error?.error || data.error || 'Onbekende fout'}\n`;
-        }
+        if (res.ok) chatEl.textContent += `🤖 ${data.text}\n`;
+        else chatEl.textContent += `⚠️ Error: ${data.error?.error || data.error}\n`;
       } catch (e) {
         chatEl.textContent += `⚠️ Fout bij verbinden: ${e.message}\n`;
       }
